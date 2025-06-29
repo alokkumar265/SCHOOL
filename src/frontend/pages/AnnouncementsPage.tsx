@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from '@/backend/contexts/AuthContext';
 import DashboardLayout from '@/frontend/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,10 +23,14 @@ import {
   Send,
   Filter,
   Search,
-  FileText
+  FileText,
+  GraduationCap,
+  Award,
+  Briefcase
 } from 'lucide-react';
 
 const AnnouncementsPage = () => {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('all');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -42,7 +47,8 @@ const AnnouncementsPage = () => {
       status: 'active',
       targetAudience: ['Class 10-A', 'Class 9-B'],
       readCount: 45,
-      attachments: ['assignment_guidelines.pdf']
+      attachments: ['assignment_guidelines.pdf'],
+      category: 'academic'
     },
     {
       id: 2,
@@ -54,7 +60,8 @@ const AnnouncementsPage = () => {
       status: 'active',
       targetAudience: ['All Parents'],
       readCount: 28,
-      attachments: ['meeting_schedule.pdf']
+      attachments: ['meeting_schedule.pdf'],
+      category: 'general'
     },
     {
       id: 3,
@@ -66,7 +73,8 @@ const AnnouncementsPage = () => {
       status: 'active',
       targetAudience: ['Class 10-A', 'Class 11-C'],
       readCount: 32,
-      attachments: ['olympiad_guidelines.pdf', 'registration_form.pdf']
+      attachments: ['olympiad_guidelines.pdf', 'registration_form.pdf'],
+      category: 'academic'
     },
     {
       id: 4,
@@ -78,7 +86,8 @@ const AnnouncementsPage = () => {
       status: 'active',
       targetAudience: ['Class 9-B'],
       readCount: 18,
-      attachments: []
+      attachments: [],
+      category: 'academic'
     },
     {
       id: 5,
@@ -90,9 +99,95 @@ const AnnouncementsPage = () => {
       status: 'active',
       targetAudience: ['All Students'],
       readCount: 15,
-      attachments: []
+      attachments: [],
+      category: 'extracurricular'
     }
   ];
+
+  // Alumni-specific announcements
+  const alumniAnnouncements = [
+    {
+      id: 101,
+      title: 'Annual Alumni Meet 2024 - Registration Open',
+      content: 'We are excited to announce the Annual Alumni Meet 2024! Join us for a day of networking, reminiscing, and celebrating our school community. The event will be held on December 15th, 2024, at the school campus. Early bird registration closes on November 30th.',
+      author: 'Alumni Association',
+      date: '2024-06-25',
+      priority: 'high',
+      status: 'active',
+      targetAudience: ['All Alumni'],
+      readCount: 156,
+      attachments: ['event_schedule.pdf', 'registration_form.pdf'],
+      category: 'alumni'
+    },
+    {
+      id: 102,
+      title: 'Alumni Career Fair - November 2024',
+      content: 'The annual Alumni Career Fair is scheduled for November 20th, 2024. This is a great opportunity for alumni to showcase job opportunities and for current students to network with professionals. Companies interested in participating should register by October 15th.',
+      author: 'Career Guidance Department',
+      date: '2024-06-24',
+      priority: 'high',
+      status: 'active',
+      targetAudience: ['All Alumni', 'Current Students'],
+      readCount: 89,
+      attachments: ['career_fair_guidelines.pdf'],
+      category: 'career'
+    },
+    {
+      id: 103,
+      title: 'Alumni Mentorship Program - New Batch',
+      content: 'Applications are now open for the Alumni Mentorship Program 2024-25. Alumni can volunteer to mentor current students in their areas of expertise. The program will run from September 2024 to May 2025. Apply by August 31st.',
+      author: 'Student Affairs Department',
+      date: '2024-06-23',
+      priority: 'medium',
+      status: 'active',
+      targetAudience: ['All Alumni'],
+      readCount: 67,
+      attachments: ['mentorship_application.pdf', 'program_guidelines.pdf'],
+      category: 'mentorship'
+    },
+    {
+      id: 104,
+      title: 'Alumni Newsletter - June 2024 Edition',
+      content: 'The June 2024 edition of our Alumni Newsletter is now available! This month features alumni success stories, upcoming events, and updates from the school. Don\'t miss out on the latest news from your alma mater.',
+      author: 'Alumni Association',
+      date: '2024-06-22',
+      priority: 'low',
+      status: 'active',
+      targetAudience: ['All Alumni'],
+      readCount: 234,
+      attachments: ['newsletter_june_2024.pdf'],
+      category: 'newsletter'
+    },
+    {
+      id: 105,
+      title: 'Alumni Achievement Spotlight - Dr. Priya Sharma',
+      content: 'Congratulations to Dr. Priya Sharma (Batch 2020) for being recognized as "Young Scientist of the Year" by the National Science Foundation. Dr. Sharma\'s research in machine learning applications has been published in top-tier journals.',
+      author: 'Alumni Association',
+      date: '2024-06-21',
+      priority: 'medium',
+      status: 'active',
+      targetAudience: ['All Alumni'],
+      readCount: 189,
+      attachments: ['achievement_article.pdf'],
+      category: 'achievement'
+    },
+    {
+      id: 106,
+      title: 'Alumni Donation Drive - School Development Fund',
+      content: 'The Alumni Association is launching its annual donation drive for the School Development Fund. Your contributions help maintain and improve school facilities, provide scholarships, and support various programs. Every contribution makes a difference.',
+      author: 'Alumni Association',
+      date: '2024-06-20',
+      priority: 'medium',
+      status: 'active',
+      targetAudience: ['All Alumni'],
+      readCount: 145,
+      attachments: ['donation_form.pdf', 'fund_utilization_report.pdf'],
+      category: 'donation'
+    }
+  ];
+
+  // Combine announcements based on user role
+  const allAnnouncements = user?.role === 'alumni' ? [...alumniAnnouncements, ...announcements] : announcements;
 
   const getPriorityColor = (priority) => {
     switch (priority) {
@@ -112,10 +207,31 @@ const AnnouncementsPage = () => {
     }
   };
 
-  const filteredAnnouncements = announcements.filter(announcement => {
+  const getCategoryColor = (category) => {
+    switch (category) {
+      case 'alumni': return 'bg-purple-100 text-purple-800';
+      case 'career': return 'bg-blue-100 text-blue-800';
+      case 'mentorship': return 'bg-green-100 text-green-800';
+      case 'newsletter': return 'bg-orange-100 text-orange-800';
+      case 'achievement': return 'bg-yellow-100 text-yellow-800';
+      case 'donation': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const filteredAnnouncements = allAnnouncements.filter(announcement => {
     const matchesSearch = announcement.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          announcement.content.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesTab = activeTab === 'all' || announcement.priority === activeTab;
+    
+    let matchesTab = false;
+    if (user?.role === 'alumni') {
+      // Alumni-specific filtering
+      matchesTab = activeTab === 'all' || announcement.category === activeTab;
+    } else {
+      // Original priority-based filtering
+      matchesTab = activeTab === 'all' || announcement.priority === activeTab;
+    }
+    
     return matchesSearch && matchesTab;
   });
 
@@ -124,18 +240,26 @@ const AnnouncementsPage = () => {
       <div className="max-w-7xl mx-auto py-8 px-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-3xl font-bold">Announcements</h1>
-            <p className="text-muted-foreground">Create and manage announcements for your classes and school community</p>
+            <h1 className="text-3xl font-bold">
+              {user?.role === 'alumni' ? 'Alumni Announcements' : 'Announcements'}
+            </h1>
+            <p className="text-muted-foreground">
+              {user?.role === 'alumni' 
+                ? 'Stay updated with alumni events, career opportunities, and school news' 
+                : 'Create and manage announcements for your classes and school community'}
+            </p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline">
               <Filter className="h-4 w-4 mr-2" />
               Filter
             </Button>
-            <Button onClick={() => setShowCreateForm(true)}>
-              <Plus className="h-4 w-4 mr-2" />
-              Create Announcement
-            </Button>
+            {user?.role !== 'alumni' && (
+              <Button onClick={() => setShowCreateForm(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Create Announcement
+              </Button>
+            )}
           </div>
         </div>
 
@@ -143,47 +267,70 @@ const AnnouncementsPage = () => {
         <div className="grid gap-4 grid-cols-1 md:grid-cols-4 mb-6">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Announcements</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                {user?.role === 'alumni' ? 'Total Announcements' : 'Total Announcements'}
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{announcements.length}</div>
+              <div className="text-2xl font-bold">{allAnnouncements.length}</div>
               <p className="text-xs text-muted-foreground">This month</p>
             </CardContent>
           </Card>
           
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">High Priority</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                {user?.role === 'alumni' ? 'Alumni Events' : 'High Priority'}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-red-600">
-                {announcements.filter(a => a.priority === 'high').length}
+                {user?.role === 'alumni' 
+                  ? allAnnouncements.filter(a => a.category === 'alumni').length
+                  : allAnnouncements.filter(a => a.priority === 'high').length
+                }
               </div>
-              <p className="text-xs text-muted-foreground">Urgent announcements</p>
+              <p className="text-xs text-muted-foreground">
+                {user?.role === 'alumni' ? 'Upcoming events' : 'Urgent announcements'}
+              </p>
             </CardContent>
           </Card>
           
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Views</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                {user?.role === 'alumni' ? 'Career Opportunities' : 'Total Views'}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {announcements.reduce((sum, a) => sum + a.readCount, 0)}
+                {user?.role === 'alumni' 
+                  ? allAnnouncements.filter(a => a.category === 'career').length
+                  : allAnnouncements.reduce((sum, a) => sum + a.readCount, 0)
+                }
               </div>
-              <p className="text-xs text-muted-foreground">Combined read count</p>
+              <p className="text-xs text-muted-foreground">
+                {user?.role === 'alumni' ? 'Job postings & fairs' : 'Combined read count'}
+              </p>
             </CardContent>
           </Card>
           
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Active</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                {user?.role === 'alumni' ? 'Mentorship Programs' : 'Active'}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-600">
-                {announcements.filter(a => a.status === 'active').length}
+                {user?.role === 'alumni' 
+                  ? allAnnouncements.filter(a => a.category === 'mentorship').length
+                  : allAnnouncements.filter(a => a.status === 'active').length
+                }
               </div>
-              <p className="text-xs text-muted-foreground">Currently active</p>
+              <p className="text-xs text-muted-foreground">
+                {user?.role === 'alumni' ? 'Available programs' : 'Currently active'}
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -191,9 +338,19 @@ const AnnouncementsPage = () => {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="high">High Priority</TabsTrigger>
-            <TabsTrigger value="medium">Medium Priority</TabsTrigger>
-            <TabsTrigger value="low">Low Priority</TabsTrigger>
+            {user?.role === 'alumni' ? (
+              <>
+                <TabsTrigger value="alumni">Events</TabsTrigger>
+                <TabsTrigger value="career">Career</TabsTrigger>
+                <TabsTrigger value="mentorship">Mentorship</TabsTrigger>
+              </>
+            ) : (
+              <>
+                <TabsTrigger value="high">High Priority</TabsTrigger>
+                <TabsTrigger value="medium">Medium Priority</TabsTrigger>
+                <TabsTrigger value="low">Low Priority</TabsTrigger>
+              </>
+            )}
           </TabsList>
 
           <TabsContent value={activeTab} className="space-y-6">
@@ -223,6 +380,11 @@ const AnnouncementsPage = () => {
                           <Badge className={getStatusColor(announcement.status)}>
                             {announcement.status}
                           </Badge>
+                          {user?.role === 'alumni' && announcement.category && (
+                            <Badge className={getCategoryColor(announcement.category)}>
+                              {announcement.category}
+                            </Badge>
+                          )}
                         </div>
                         <CardDescription className="flex items-center gap-4">
                           <span className="flex items-center gap-1">

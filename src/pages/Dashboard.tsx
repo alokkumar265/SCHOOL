@@ -1,7 +1,7 @@
 import { useAuth } from '@/backend/contexts/AuthContext';
 import DashboardLayout from '@/frontend/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, Users, BookOpen, Calendar, Building, MessageSquare, TrendingUp, TrendingDown, GraduationCap, Network, Award, ClipboardList, Activity, Clock, Trophy, Bell } from 'lucide-react';
+import { User, Users, BookOpen, Calendar, Building, MessageSquare, TrendingUp, TrendingDown, GraduationCap, Network, Award, ClipboardList, Activity, Clock, Trophy, Bell, CreditCard, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { StatCard } from '@/components/analytics/DashboardStats';
 import { AttendanceChart } from '@/components/analytics/AttendanceChart';
@@ -233,7 +233,7 @@ const Dashboard = () => {
   // Get display name based on user role
   const getDisplayName = () => {
     if (user?.role === 'admin') {
-      return 'Alumni User';
+      return 'Administrator';
     }
     return user?.name || 'User';
   };
@@ -242,15 +242,15 @@ const Dashboard = () => {
   const getRoleDisplayName = () => {
     switch (user?.role) {
       case 'admin':
-        return 'alumni';
+        return 'Administrator';
       case 'teacher':
-        return 'teacher';
+        return 'Teacher';
       case 'student':
-        return 'student';
+        return 'Student';
       case 'alumni':
-        return 'alumni';
+        return 'Alumni';
       default:
-        return 'user';
+        return 'User';
     }
   };
 
@@ -568,10 +568,319 @@ const Dashboard = () => {
     );
   };
 
+  const getAdminContent = () => {
+    return (
+      <div className="space-y-6">
+        {/* Welcome Section */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">
+              Welcome back, {getDisplayName()}!
+            </h1>
+            <p className="text-muted-foreground">
+              Here's what's happening with your school management system today.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">{currentGreeting}</span>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Activity className="h-5 w-5" />
+              Quick Actions
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Link to="/users">
+                  <Users className="h-6 w-6" />
+                  <span className="text-sm">Manage Users</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Link to="/students">
+                  <Users className="h-6 w-6" />
+                  <span className="text-sm">Students</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Link to="/fees">
+                  <CreditCard className="h-6 w-6" />
+                  <span className="text-sm">Fee Management</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Link to="/announcements">
+                  <Bell className="h-6 w-6" />
+                  <span className="text-sm">Announcements</span>
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Analytics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>School Overview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AttendanceChart data={mockAttendanceData} />
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Academic Performance</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <PerformanceChart data={mockPerformanceData} />
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Recent Activities */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent System Activities</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {mockActivityFeed.slice(0, 8).map((item, idx) => (
+                <div key={idx} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span className="text-sm">{item.text}</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground">{item.date}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
+
+  const getAlumniContent = () => {
+    return (
+      <div className="space-y-6">
+        {/* Welcome Section */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">
+              Welcome back, {getDisplayName()}!
+            </h1>
+            <p className="text-muted-foreground">
+              Stay connected with your alma mater and fellow alumni. Here's what's happening in the alumni community.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">{currentGreeting}</span>
+          </div>
+        </div>
+
+        {/* Alumni Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Alumni Network</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-blue-600">1,247</div>
+              <p className="text-xs text-muted-foreground">Total alumni</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Upcoming Events</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-600">5</div>
+              <p className="text-xs text-muted-foreground">This month</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Mentorship</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-purple-600">12</div>
+              <p className="text-xs text-muted-foreground">Active mentors</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Job Postings</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-orange-600">8</div>
+              <p className="text-xs text-muted-foreground">New opportunities</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Quick Actions */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Activity className="h-5 w-5" />
+              Quick Actions
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Link to="/alumni-directory">
+                  <Users className="h-6 w-6" />
+                  <span className="text-sm">Alumni Directory</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Link to="/events">
+                  <Calendar className="h-6 w-6" />
+                  <span className="text-sm">Events & Reunions</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Link to="/job-board">
+                  <Briefcase className="h-6 w-6" />
+                  <span className="text-sm">Job Board</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Link to="/mentorship">
+                  <GraduationCap className="h-6 w-6" />
+                  <span className="text-sm">Mentorship</span>
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Recent Activities & Updates */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Alumni Activities</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span className="text-sm">Annual Alumni Meet registration opened</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground">2 hours ago</span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-sm">New job posting: Senior Developer at TechCorp</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground">1 day ago</span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    <span className="text-sm">Mentorship program applications closing soon</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground">3 days ago</span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                    <span className="text-sm">Alumni newsletter published</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground">1 week ago</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Upcoming Events</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <div>
+                    <h4 className="font-medium">Annual Alumni Meet 2024</h4>
+                    <p className="text-sm text-muted-foreground">December 15, 2024</p>
+                  </div>
+                  <Button size="sm" variant="outline">Register</Button>
+                </div>
+                <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <div>
+                    <h4 className="font-medium">Career Fair</h4>
+                    <p className="text-sm text-muted-foreground">November 20, 2024</p>
+                  </div>
+                  <Button size="sm" variant="outline">Attend</Button>
+                </div>
+                <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <div>
+                    <h4 className="font-medium">Mentorship Workshop</h4>
+                    <p className="text-sm text-muted-foreground">November 10, 2024</p>
+                  </div>
+                  <Button size="sm" variant="outline">Join</Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Alumni Network Stats */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Alumni Network Overview</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-600 mb-2">45%</div>
+                <p className="text-sm text-muted-foreground">Alumni in Tech Industry</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-600 mb-2">78%</div>
+                <p className="text-sm text-muted-foreground">Active Alumni Network</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-600 mb-2">23</div>
+                <p className="text-sm text-muted-foreground">Countries Represented</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
+
   if (user?.role === 'teacher') {
     return (
       <DashboardLayout>
         {getTeacherContent()}
+      </DashboardLayout>
+    );
+  }
+
+  if (user?.role === 'admin') {
+    return (
+      <DashboardLayout>
+        {getAdminContent()}
+      </DashboardLayout>
+    );
+  }
+
+  if (user?.role === 'alumni') {
+    return (
+      <DashboardLayout>
+        {getAlumniContent()}
       </DashboardLayout>
     );
   }

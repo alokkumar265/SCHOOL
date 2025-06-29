@@ -24,9 +24,9 @@ import {
 } from 'lucide-react';
 
 const TeacherClassesPage = () => {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedClass, setSelectedClass] = useState(null);
+  const [activeTab, setActiveTab] = useState<string>('overview');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedClass, setSelectedClass] = useState<any>(null);
 
   // Mock class data
   const classes = [
@@ -137,19 +137,19 @@ const TeacherClassesPage = () => {
     }
   ];
 
-  const getAttendanceColor = (attendance) => {
+  const getAttendanceColor = (attendance: number) => {
     if (attendance >= 95) return 'text-green-600 bg-green-100';
     if (attendance >= 90) return 'text-yellow-600 bg-yellow-100';
     return 'text-red-600 bg-red-100';
   };
 
-  const getPerformanceColor = (performance) => {
+  const getPerformanceColor = (performance: number) => {
     if (performance >= 90) return 'text-green-600 bg-green-100';
     if (performance >= 80) return 'text-yellow-600 bg-yellow-100';
     return 'text-red-600 bg-red-100';
   };
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'present': return 'text-green-600 bg-green-100';
       case 'absent': return 'text-red-600 bg-red-100';

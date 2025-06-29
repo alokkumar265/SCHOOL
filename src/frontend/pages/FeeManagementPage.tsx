@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import DashboardLayout from '@/frontend/components/layout/DashboardLayout';
+import { useAuth } from '@/backend/contexts/AuthContext';
 import { 
   CreditCard, 
   DollarSign,
@@ -40,7 +41,13 @@ import {
   Check,
   X,
   AlertTriangle,
-  Info
+  Info,
+  GraduationCap,
+  School,
+  Microscope,
+  Computer,
+  Award,
+  Building
 } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
@@ -70,7 +77,7 @@ const printStyles = `
 interface ServiceFee {
   id: string;
   serviceName: string;
-  category: 'Transportation' | 'Canteen' | 'Library' | 'Extracurricular' | 'Academic' | 'Other';
+  category: 'Transportation' | 'Canteen' | 'Library' | 'Extracurricular' | 'Academic' | 'Other' | 'Alumni Association' | 'Events & Reunions' | 'Mentorship' | 'Professional Development' | 'Donations' | 'Tuition' | 'Laboratory' | 'Sports' | 'Technology' | 'Examination' | 'Uniform' | 'Books' | 'Medical';
   description: string;
   amount: number;
   dueDate: string;
@@ -86,7 +93,7 @@ interface PaymentMethod {
   id: string;
   name: string;
   type: 'card' | 'upi' | 'netbanking' | 'wallet' | 'cash';
-  icon: string;
+  icon: React.ReactElement;
   description: string;
   processingFee: number;
   estimatedTime: string;
@@ -105,6 +112,7 @@ interface PaymentHistory {
 }
 
 const FeeManagementPage = () => {
+  const { user } = useAuth();
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -123,40 +131,84 @@ const FeeManagementPage = () => {
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
 
-  // Mock student and school info
+  // Student info
   const studentInfo = {
-    name: 'Aarav Sharma',
-    roll: '23',
-    class: '10',
-    section: 'B',
-    parent: 'Mr. Rajesh Sharma',
+    name: 'Alex Johnson',
+    studentId: 'ST2024-001',
+    grade: '10',
+    section: 'A',
+    rollNumber: '10A001',
+    parentName: 'Mr. & Mrs. Johnson',
+    parentPhone: '+91 98765 43210',
+    parentEmail: 'johnson@example.com'
   };
+
+  // Alumni info
+  const alumniInfo = {
+    name: 'Priya Sharma',
+    alumniId: 'AL2020-001',
+    graduationYear: '2020',
+    degree: 'Bachelor of Science',
+    currentCompany: 'Tech Solutions Inc.',
+    position: 'Software Engineer',
+  };
+
   const schoolInfo = {
     name: 'Veena Public School',
     logo: '', // Add logo URL if available
     address: '123 School Road, Delhi',
   };
 
-  // All possible student service fees (sidebar services)
-  const allFeeData: ServiceFee[] = [
-    // Academics
-    { id: '1', serviceName: 'Tuition Fee', category: 'Academic', amount: 8000, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-10`, status: 'Pending', description: 'Monthly tuition fee', frequency: 'Monthly', icon: 'BookOpen', isOptional: false },
-    { id: '2', serviceName: 'Lab Fee', category: 'Academic', amount: 1500, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-15`, status: 'Paid', description: 'Lab usage', frequency: 'Quarterly', icon: 'Activity', isOptional: false },
-    { id: '3', serviceName: 'Examination Fee', category: 'Academic', amount: 2000, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-20`, status: 'Upcoming', description: 'Exam fee', frequency: 'Quarterly', icon: 'FileText', isOptional: false },
-    // Library
-    { id: '4', serviceName: 'Library Membership', category: 'Library', amount: 500, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-25`, status: 'Pending', description: 'Library access', frequency: 'Annual', icon: 'Library', isOptional: false },
-    { id: '5', serviceName: 'Digital Resources', category: 'Library', amount: 300, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-12`, status: 'Pending', description: 'E-books, online content', frequency: 'Annual', icon: 'BookOpen', isOptional: true },
-    // Transport
-    { id: '6', serviceName: 'Transport Fee', category: 'Transportation', amount: 1200, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-10`, status: 'Overdue', description: 'School bus', frequency: 'Monthly', icon: 'Bus', isOptional: false },
-    // Canteen
-    { id: '7', serviceName: 'Canteen Fee', category: 'Canteen', amount: 600, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-18`, status: 'Paid', description: 'Canteen subscription', frequency: 'Monthly', icon: 'Utensils', isOptional: true },
+  // Student-specific fee data
+  const studentFeeData: ServiceFee[] = [
+    // Tuition Fees
+    { id: '1', serviceName: 'Tuition Fee - March 2024', category: 'Tuition', amount: 5000, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-10`, status: 'Pending', description: 'Monthly tuition fee for March 2024', frequency: 'Monthly', icon: 'School', isOptional: false },
+    { id: '2', serviceName: 'Tuition Fee - February 2024', category: 'Tuition', amount: 5000, dueDate: `${currentYear}-${String(currentMonth).padStart(2,'0')}-10`, status: 'Paid', description: 'Monthly tuition fee for February 2024', frequency: 'Monthly', icon: 'School', isOptional: false, paidAmount: 5000, paidDate: '2024-02-08' },
+    
+    // Academic Fees
+    { id: '3', serviceName: 'Examination Fee', category: 'Examination', amount: 800, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-15`, status: 'Pending', description: 'Mid-term examination fee', frequency: 'One-time', icon: 'FileText', isOptional: false },
+    { id: '4', serviceName: 'Laboratory Fee', category: 'Laboratory', amount: 1200, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-20`, status: 'Pending', description: 'Science laboratory usage fee', frequency: 'Quarterly', icon: 'Microscope', isOptional: false },
+    { id: '5', serviceName: 'Computer Lab Fee', category: 'Technology', amount: 600, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-25`, status: 'Pending', description: 'Computer laboratory access fee', frequency: 'Quarterly', icon: 'Computer', isOptional: false },
+    
+    // Library & Books
+    { id: '6', serviceName: 'Library Fee', category: 'Library', amount: 300, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-12`, status: 'Paid', description: 'Library membership and book borrowing fee', frequency: 'Annual', icon: 'Library', isOptional: false, paidAmount: 300, paidDate: '2024-01-15' },
+    { id: '7', serviceName: 'Textbook Fee', category: 'Books', amount: 1500, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-18`, status: 'Pending', description: 'New academic year textbook fee', frequency: 'Annual', icon: 'BookOpen', isOptional: false },
+    
+    // Transportation
+    { id: '8', serviceName: 'Transportation Fee', category: 'Transportation', amount: 2000, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-05`, status: 'Pending', description: 'Monthly school bus transportation fee', frequency: 'Monthly', icon: 'Bus', isOptional: true },
+    
     // Extracurricular
-    { id: '8', serviceName: 'Sports Fee', category: 'Extracurricular', amount: 800, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-22`, status: 'Pending', description: 'Sports, clubs', frequency: 'Monthly', icon: 'Activity', isOptional: true },
-    // Study Resources
-    { id: '9', serviceName: 'Study Material Fee', category: 'Academic', amount: 400, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-05`, status: 'Paid', description: 'Books, notes, online resources', frequency: 'Annual', icon: 'BookOpen', isOptional: true },
-    // AI Assistant (optional)
-    { id: '10', serviceName: 'AI Assistant Subscription', category: 'Academic', amount: 200, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-28`, status: 'Pending', description: 'AI learning tools', frequency: 'Annual', icon: 'BookOpen', isOptional: true },
+    { id: '9', serviceName: 'Sports Fee', category: 'Sports', amount: 400, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-22`, status: 'Pending', description: 'Sports equipment and facility usage fee', frequency: 'Quarterly', icon: 'Activity', isOptional: true },
+    { id: '10', serviceName: 'Music Class Fee', category: 'Extracurricular', amount: 800, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-28`, status: 'Pending', description: 'Music class and instrument rental fee', frequency: 'Quarterly', icon: 'Award', isOptional: true },
+    
+    // Other Services
+    { id: '11', serviceName: 'Canteen Fee', category: 'Canteen', amount: 500, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-08`, status: 'Paid', description: 'Monthly canteen meal plan fee', frequency: 'Monthly', icon: 'Utensils', isOptional: true, paidAmount: 500, paidDate: '2024-03-05' },
+    { id: '12', serviceName: 'Medical Checkup Fee', category: 'Medical', amount: 300, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-30`, status: 'Upcoming', description: 'Annual health checkup fee', frequency: 'Annual', icon: 'Shield', isOptional: true },
+    { id: '13', serviceName: 'Uniform Fee', category: 'Other', amount: 1200, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-14`, status: 'Pending', description: 'New academic year uniform fee', frequency: 'Annual', icon: 'Users', isOptional: false },
   ];
+
+  // Alumni-specific fee data
+  const alumniFeeData: ServiceFee[] = [
+    // Alumni Association
+    { id: '1', serviceName: 'Alumni Association Membership', category: 'Alumni Association', amount: 2000, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-10`, status: 'Pending', description: 'Annual alumni association membership', frequency: 'Annual', icon: 'Users', isOptional: false },
+    { id: '2', serviceName: 'Alumni Directory Access', category: 'Alumni Association', amount: 500, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-15`, status: 'Paid', description: 'Premium alumni directory access', frequency: 'Annual', icon: 'Users', isOptional: true },
+    // Events & Reunions
+    { id: '3', serviceName: 'Annual Alumni Meet', category: 'Events & Reunions', amount: 1500, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-20`, status: 'Upcoming', description: 'Annual alumni reunion event', frequency: 'Annual', icon: 'Calendar', isOptional: true },
+    { id: '4', serviceName: 'Homecoming Event', category: 'Events & Reunions', amount: 800, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-25`, status: 'Pending', description: 'Homecoming celebration event', frequency: 'Annual', icon: 'Calendar', isOptional: true },
+    // Mentorship Programs
+    { id: '5', serviceName: 'Mentorship Program Fee', category: 'Mentorship', amount: 1000, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-12`, status: 'Pending', description: 'Alumni mentorship program participation', frequency: 'Annual', icon: 'Users', isOptional: true },
+    { id: '6', serviceName: 'Career Guidance Session', category: 'Mentorship', amount: 300, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-18`, status: 'Paid', description: 'Career guidance for current students', frequency: 'One-time', icon: 'Activity', isOptional: true },
+    // Professional Development
+    { id: '7', serviceName: 'Professional Workshop', category: 'Professional Development', amount: 1200, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-22`, status: 'Overdue', description: 'Professional development workshop', frequency: 'One-time', icon: 'Activity', isOptional: true },
+    { id: '8', serviceName: 'Networking Event', category: 'Professional Development', amount: 600, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-28`, status: 'Pending', description: 'Alumni networking event', frequency: 'One-time', icon: 'Users', isOptional: true },
+    // Donations & Contributions
+    { id: '9', serviceName: 'Alumni Scholarship Fund', category: 'Donations', amount: 5000, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-05`, status: 'Paid', description: 'Contribution to alumni scholarship fund', frequency: 'One-time', icon: 'Award', isOptional: true },
+    { id: '10', serviceName: 'School Development Fund', category: 'Donations', amount: 2000, dueDate: `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-30`, status: 'Pending', description: 'School infrastructure development', frequency: 'One-time', icon: 'Building', isOptional: true },
+  ];
+
+  // Use appropriate fee data based on user role
+  const allFeeData = user?.role === 'student' ? studentFeeData : alumniFeeData;
+  const userInfo = user?.role === 'student' ? studentInfo : alumniInfo;
 
   const paymentMethods: PaymentMethod[] = [
     { id: 'card', name: 'Credit/Debit Card', type: 'card', icon: <CreditCard className="h-5 w-5" />, description: 'Use your credit or debit card for payment', processingFee: 0, estimatedTime: 'Instant' },
@@ -176,7 +228,10 @@ const FeeManagementPage = () => {
 
   const totalDue = filteredFees.reduce((sum, fee) => sum + fee.amount, 0);
 
-  const categories = ['Academic', 'Transportation', 'Canteen', 'Library', 'Extracurricular'];
+  const categories = user?.role === 'student' 
+    ? ['Tuition', 'Academic', 'Transportation', 'Canteen', 'Library', 'Extracurricular', 'Other']
+    : ['Alumni Association', 'Events & Reunions', 'Mentorship', 'Professional Development', 'Donations'];
+    
   const breakdown = categories.map(cat => ({
     name: cat,
     total: filteredFees.filter(fee => fee.category === cat).reduce((sum, fee) => sum + fee.amount, 0),
@@ -206,8 +261,10 @@ const FeeManagementPage = () => {
         date: new Date().toISOString().slice(0,10),
         amount: selectedTotal,
         method: paymentMethods.find(m => m.id === selectedMethod)?.name || '',
+        reference: `REF-${Date.now()}`,
         status: 'Completed',
         description: selectedFeeObjs.map(f => f.serviceName).join(', '),
+        services: selectedFeeObjs.map(f => f.serviceName),
       },
     ]);
     setPaymentSuccess(true);
@@ -229,9 +286,14 @@ const FeeManagementPage = () => {
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight">Fee Management</h2>
+            <h2 className="text-3xl font-bold tracking-tight">
+              {user?.role === 'student' ? 'Student Fee Management' : 'Alumni Fee Management'}
+            </h2>
             <p className="text-muted-foreground max-w-xl">
-              View a detailed breakdown of all school fees for your child. Select a month to see only due or pending fees. Pay securely online and print/download a parent-friendly fee slip or receipt.
+              {user?.role === 'student' 
+                ? 'Manage your academic fees, transportation, and other school services. View payment history and download receipts for your records.'
+                : 'Manage your alumni association fees, event registrations, and other alumni services. View payment history and download receipts for your records.'
+              }
             </p>
           </div>
           <div className="flex gap-2 items-center">
@@ -253,7 +315,12 @@ const FeeManagementPage = () => {
         <Card>
           <CardHeader>
             <CardTitle>Fee Breakdown for {monthNames[selectedMonth]} {selectedYear}</CardTitle>
-            <CardDescription>All available fees for every student service. Only due, pending, or overdue fees for this month are payable. Upcoming fees are not shown.</CardDescription>
+            <CardDescription>
+              {user?.role === 'student' 
+                ? 'All available fees for student services. Only due, pending, or overdue fees for this month are payable. Upcoming fees are not shown.'
+                : 'All available fees for alumni services. Only due, pending, or overdue fees for this month are payable. Upcoming fees are not shown.'
+              }
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
@@ -361,11 +428,26 @@ const FeeManagementPage = () => {
                       {schoolInfo.logo && <img src={schoolInfo.logo} alt="School Logo" className="h-10" />}
                     </div>
                     <div className="flex flex-wrap gap-2 mb-2 text-xs">
-                      <div><b>Student:</b> {studentInfo.name}</div>
-                      <div><b>Roll No:</b> {studentInfo.roll}</div>
-                      <div><b>Class:</b> {studentInfo.class}-{studentInfo.section}</div>
-                      <div><b>Parent:</b> {studentInfo.parent}</div>
-                      <div><b>Month:</b> {monthNames[selectedMonth]} {selectedYear}</div>
+                      {user?.role === 'student' ? (
+                        <>
+                          <div><b>Student:</b> {(userInfo as typeof studentInfo).name}</div>
+                          <div><b>Student ID:</b> {(userInfo as typeof studentInfo).studentId}</div>
+                          <div><b>Grade:</b> {(userInfo as typeof studentInfo).grade}-{(userInfo as typeof studentInfo).section}</div>
+                          <div><b>Roll No:</b> {(userInfo as typeof studentInfo).rollNumber}</div>
+                          <div><b>Parent:</b> {(userInfo as typeof studentInfo).parentName}</div>
+                          <div><b>Month:</b> {monthNames[selectedMonth]} {selectedYear}</div>
+                        </>
+                      ) : (
+                        <>
+                          <div><b>Alumni:</b> {(userInfo as typeof alumniInfo).name}</div>
+                          <div><b>Alumni ID:</b> {(userInfo as typeof alumniInfo).alumniId}</div>
+                          <div><b>Graduation Year:</b> {(userInfo as typeof alumniInfo).graduationYear}</div>
+                          <div><b>Degree:</b> {(userInfo as typeof alumniInfo).degree}</div>
+                          <div><b>Current Company:</b> {(userInfo as typeof alumniInfo).currentCompany}</div>
+                          <div><b>Position:</b> {(userInfo as typeof alumniInfo).position}</div>
+                          <div><b>Month:</b> {monthNames[selectedMonth]} {selectedYear}</div>
+                        </>
+                      )}
                     </div>
                     <div className="mb-2">
                       <b>Payment Date:</b> {new Date().toLocaleDateString()}<br/>
@@ -475,10 +557,24 @@ const FeeManagementPage = () => {
                   {schoolInfo.logo && <img src={schoolInfo.logo} alt="School Logo" className="h-10" />}
                 </div>
                 <div className="flex flex-wrap gap-2 mb-2 text-xs">
-                  <div><b>Student:</b> {studentInfo.name}</div>
-                  <div><b>Roll No:</b> {studentInfo.roll}</div>
-                  <div><b>Class:</b> {studentInfo.class}-{studentInfo.section}</div>
-                  <div><b>Parent:</b> {studentInfo.parent}</div>
+                  {user?.role === 'student' ? (
+                    <>
+                      <div><b>Student:</b> {(userInfo as typeof studentInfo).name}</div>
+                      <div><b>Student ID:</b> {(userInfo as typeof studentInfo).studentId}</div>
+                      <div><b>Grade:</b> {(userInfo as typeof studentInfo).grade}-{(userInfo as typeof studentInfo).section}</div>
+                      <div><b>Roll No:</b> {(userInfo as typeof studentInfo).rollNumber}</div>
+                      <div><b>Parent:</b> {(userInfo as typeof studentInfo).parentName}</div>
+                    </>
+                  ) : (
+                    <>
+                      <div><b>Alumni:</b> {(userInfo as typeof alumniInfo).name}</div>
+                      <div><b>Alumni ID:</b> {(userInfo as typeof alumniInfo).alumniId}</div>
+                      <div><b>Graduation Year:</b> {(userInfo as typeof alumniInfo).graduationYear}</div>
+                      <div><b>Degree:</b> {(userInfo as typeof alumniInfo).degree}</div>
+                      <div><b>Current Company:</b> {(userInfo as typeof alumniInfo).currentCompany}</div>
+                      <div><b>Position:</b> {(userInfo as typeof alumniInfo).position}</div>
+                    </>
+                  )}
                 </div>
                 <div className="mb-2">
                   <b>Payment Date:</b> {new Date(historySlip.date).toLocaleDateString()}<br/>

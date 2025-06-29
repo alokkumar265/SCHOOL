@@ -228,7 +228,7 @@ const App = () => {
               <Route 
                 path="/students" 
                 element={
-                  <ProtectedRoute allowedRoles={['admin', 'teacher']}>
+                  <ProtectedRoute allowedRoles={['admin']}>
                     <StudentsManagement />
                   </ProtectedRoute>
                 } 
@@ -262,7 +262,7 @@ const App = () => {
               <Route 
                 path="/staff" 
                 element={
-                  <ProtectedRoute allowedRoles={['admin', 'teacher']}>
+                  <ProtectedRoute allowedRoles={['admin']}>
                     <StaffPage />
                   </ProtectedRoute>
                 } 
@@ -396,7 +396,7 @@ const App = () => {
               <Route 
                 path="/announcements" 
                 element={
-                  <ProtectedRoute allowedRoles={['student', 'teacher', 'admin', 'parent']}>
+                  <ProtectedRoute allowedRoles={['student', 'teacher', 'admin', 'parent', 'alumni']}>
                     <AnnouncementsPage />
                   </ProtectedRoute>
                 } 
@@ -438,7 +438,7 @@ const App = () => {
               <Route 
                 path="/achievements" 
                 element={
-                  <ProtectedRoute allowedRoles={['student', 'alumni']}>
+                  <ProtectedRoute allowedRoles={['student', 'alumni', 'admin']}>
                     <AchievementsPage />
                   </ProtectedRoute>
                 } 
@@ -446,7 +446,7 @@ const App = () => {
               <Route 
                 path="/donation" 
                 element={
-                  <ProtectedRoute allowedRoles={['alumni']}>
+                  <ProtectedRoute allowedRoles={['alumni', 'admin']}>
                     <DonationPage />
                   </ProtectedRoute>
                 } 
@@ -454,7 +454,7 @@ const App = () => {
               <Route 
                 path="/alumni-directory" 
                 element={
-                  <ProtectedRoute allowedRoles={['alumni']}>
+                  <ProtectedRoute allowedRoles={['alumni', 'admin']}>
                     <AlumniDirectoryPage />
                   </ProtectedRoute>
                 } 
@@ -462,7 +462,7 @@ const App = () => {
               <Route 
                 path="/job-board" 
                 element={
-                  <ProtectedRoute allowedRoles={['alumni']}>
+                  <ProtectedRoute allowedRoles={['alumni', 'admin']}>
                     <JobBoardPage />
                   </ProtectedRoute>
                 } 
@@ -470,7 +470,7 @@ const App = () => {
               <Route 
                 path="/achievements-spotlight" 
                 element={
-                  <ProtectedRoute allowedRoles={['alumni']}>
+                  <ProtectedRoute allowedRoles={['alumni', 'admin']}>
                     <AchievementsSpotlightPage />
                   </ProtectedRoute>
                 } 
@@ -478,7 +478,7 @@ const App = () => {
               <Route 
                 path="/mentorship" 
                 element={
-                  <ProtectedRoute allowedRoles={['alumni']}>
+                  <ProtectedRoute allowedRoles={['alumni', 'admin']}>
                     <MentorshipPage />
                   </ProtectedRoute>
                 } 
@@ -486,7 +486,7 @@ const App = () => {
               <Route 
                 path="/newsletter" 
                 element={
-                  <ProtectedRoute allowedRoles={['alumni']}>
+                  <ProtectedRoute allowedRoles={['alumni', 'admin']}>
                     <NewsletterPage />
                   </ProtectedRoute>
                 } 
@@ -494,7 +494,7 @@ const App = () => {
               <Route 
                 path="/badges" 
                 element={
-                  <ProtectedRoute allowedRoles={['alumni']}>
+                  <ProtectedRoute allowedRoles={['alumni', 'admin']}>
                     <BadgesPage />
                   </ProtectedRoute>
                 } 
@@ -502,7 +502,7 @@ const App = () => {
               <Route 
                 path="/gallery" 
                 element={
-                  <ProtectedRoute allowedRoles={['alumni']}>
+                  <ProtectedRoute allowedRoles={['alumni', 'admin']}>
                     <GalleryPage />
                   </ProtectedRoute>
                 } 
@@ -600,7 +600,7 @@ const App = () => {
               <Route 
                 path="/parent-portal" 
                 element={
-                  <ProtectedRoute allowedRoles={['parent']}>
+                  <ProtectedRoute allowedRoles={['parent', 'student']}>
                     <ParentPortalPage />
                   </ProtectedRoute>
                 } 
@@ -632,7 +632,7 @@ const App = () => {
               <Route 
                 path="/fee-management" 
                 element={
-                  <ProtectedRoute allowedRoles={['admin', 'teacher']}>
+                  <ProtectedRoute allowedRoles={['admin', 'student']}>
                     <FeeManagementPage />
                   </ProtectedRoute>
                 } 
