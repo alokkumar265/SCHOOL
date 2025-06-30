@@ -1163,6 +1163,114 @@ const DashboardSidebar = () => {
     </SidebarMenu>
   );
 
+  // Staff-specific navigation
+  const getStaffNavigation = () => (
+    <SidebarMenu className="space-y-2">
+      {/* Dashboard */}
+      <SidebarMenuItem>
+        <SidebarMenuButton asChild>
+          <NavLink to="/dashboard" className={getLinkClass}>
+            <div className="flex items-center">
+              <Home className="mr-3 h-5 w-5" />
+              {!collapsed && <span className="text-sm">Dashboard</span>}
+            </div>
+          </NavLink>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+
+      {/* Salary Group */}
+      <SidebarGroup>
+        <SidebarGroupLabel>Salary</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <NavLink to="/my-salary" className={getLinkClass}>
+                <div className="flex items-center">
+                  <CreditCard className="mr-3 h-5 w-5" />
+                  {!collapsed && <span className="text-sm">My Salary</span>}
+                </div>
+              </NavLink>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <NavLink to="/salary-history" className={getLinkClass}>
+                <div className="flex items-center">
+                  <FileText className="mr-3 h-5 w-5" />
+                  {!collapsed && <span className="text-sm">Salary History</span>}
+                </div>
+              </NavLink>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarGroupContent>
+      </SidebarGroup>
+
+      {/* Communication Group */}
+      <SidebarGroup>
+        <SidebarGroupLabel>Communication</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <NavLink to="/announcements" className={getLinkClass}>
+                <div className="flex items-center">
+                  <Bell className="mr-3 h-5 w-5" />
+                  {!collapsed && <span className="text-sm">Announcements</span>}
+                </div>
+              </NavLink>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <NavLink to="/feedback" className={getLinkClass}>
+                <div className="flex items-center">
+                  <MessageSquare className="mr-3 h-5 w-5" />
+                  {!collapsed && <span className="text-sm">Feedback</span>}
+                </div>
+              </NavLink>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <NavLink to="/notifications" className={getLinkClass}>
+                <div className="flex items-center">
+                  <Bell className="mr-3 h-5 w-5" />
+                  {!collapsed && <span className="text-sm">Notifications</span>}
+                </div>
+              </NavLink>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarGroupContent>
+      </SidebarGroup>
+
+      {/* Account Group */}
+      <SidebarGroup>
+        <SidebarGroupLabel>Account</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <NavLink to="/profile" className={getLinkClass}>
+                <div className="flex items-center">
+                  <User className="mr-3 h-5 w-5" />
+                  {!collapsed && <span className="text-sm">Profile</span>}
+                </div>
+              </NavLink>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <NavLink to="/settings" className={getLinkClass}>
+                <div className="flex items-center">
+                  <Settings className="mr-3 h-5 w-5" />
+                  {!collapsed && <span className="text-sm">Settings</span>}
+                </div>
+              </NavLink>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    </SidebarMenu>
+  );
+
   // Get navigation based on user role
   const getNavigation = () => {
     switch (user?.role) {
@@ -1174,6 +1282,8 @@ const DashboardSidebar = () => {
         return getAdminNavigation();
       case 'teacher':
         return getTeacherNavigation();
+      case 'staff':
+        return getStaffNavigation();
       default:
         return getStudentNavigation(); // Default to student navigation
     }

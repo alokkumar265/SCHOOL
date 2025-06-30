@@ -150,6 +150,14 @@ const Login = () => {
                 </div>
                 alumni@school.edu / alumni
               </div>
+              <div className="p-2 bg-white border rounded hover:bg-gray-50 transition-colors cursor-pointer"
+                   onClick={() => {setEmail('staff@school.edu'); setPassword('staff');}}>
+                <div className="flex items-center gap-2 mb-1">
+                  <User className="h-4 w-4 text-gray-600" />
+                  <strong>Staff:</strong>
+                </div>
+                staff@school.edu / staff
+              </div>
             </div>
             
             {/* Student-specific information */}

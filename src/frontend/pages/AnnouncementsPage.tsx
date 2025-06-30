@@ -186,8 +186,55 @@ const AnnouncementsPage = () => {
     }
   ];
 
+  // Staff-specific announcements
+  const staffAnnouncements = [
+    {
+      id: 201,
+      title: 'Staff Meeting Scheduled',
+      content: 'A mandatory staff meeting will be held on July 2nd at 10:00 AM in the conference hall. All staff are required to attend.',
+      author: 'School Administration',
+      date: '2025-06-28',
+      priority: 'high',
+      status: 'active',
+      targetAudience: ['All Staff'],
+      readCount: 22,
+      attachments: ['meeting_agenda.pdf'],
+      category: 'general'
+    },
+    {
+      id: 202,
+      title: 'Policy Update: Leave Application',
+      content: 'The leave application process has been updated. Please review the new policy document attached and direct any questions to HR.',
+      author: 'HR Department',
+      date: '2025-06-25',
+      priority: 'medium',
+      status: 'active',
+      targetAudience: ['All Staff'],
+      readCount: 18,
+      attachments: ['leave_policy.pdf'],
+      category: 'policy'
+    },
+    {
+      id: 203,
+      title: 'Salary Disbursement Notice',
+      content: 'Salaries for June 2025 will be credited on July 1st. Please ensure your bank details are up to date.',
+      author: 'Accounts Department',
+      date: '2025-06-24',
+      priority: 'low',
+      status: 'active',
+      targetAudience: ['All Staff'],
+      readCount: 25,
+      attachments: [],
+      category: 'finance'
+    }
+  ];
+
   // Combine announcements based on user role
-  const allAnnouncements = user?.role === 'alumni' ? [...alumniAnnouncements, ...announcements] : announcements;
+  const allAnnouncements = user?.role === 'alumni' 
+    ? [...alumniAnnouncements, ...announcements]
+    : user?.role === 'staff'
+      ? staffAnnouncements
+      : announcements;
 
   const getPriorityColor = (priority) => {
     switch (priority) {
@@ -554,4 +601,4 @@ const AnnouncementsPage = () => {
   );
 };
 
-export default AnnouncementsPage; 
+export default AnnouncementsPage;

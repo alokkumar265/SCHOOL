@@ -1,7 +1,7 @@
 import { useAuth } from '@/backend/contexts/AuthContext';
 import DashboardLayout from '@/frontend/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, Users, BookOpen, Calendar, Building, MessageSquare, TrendingUp, TrendingDown, GraduationCap, Network, Award, ClipboardList, Activity, Clock, Trophy, Bell, CreditCard, Briefcase } from 'lucide-react';
+import { User, Users, BookOpen, Calendar, Building, MessageSquare, TrendingUp, TrendingDown, GraduationCap, Network, Award, ClipboardList, Activity, Clock, Trophy, Bell, CreditCard, Briefcase, FileText, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { StatCard } from '@/components/analytics/DashboardStats';
 import { AttendanceChart } from '@/components/analytics/AttendanceChart';
@@ -249,6 +249,8 @@ const Dashboard = () => {
         return 'Student';
       case 'alumni':
         return 'Alumni';
+      case 'staff':
+        return 'Staff';
       default:
         return 'User';
     }
@@ -334,6 +336,14 @@ const Dashboard = () => {
         );
       case 'alumni':
         return null; // Alumni doesn't need stat cards in the main area
+      case 'staff':
+        return (
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
+            <StatCard title="My Salary" value="₹45,000" description="Current Month" icon={CreditCard} trend={0.5} color="text-green-600" />
+            <StatCard title="Salary History" value="12 Payments" description="Last 12 months" icon={FileText} trend={0.2} color="text-blue-600" />
+            <StatCard title="Announcements" value="3" description="Unread" icon={Bell} trend={1.1} color="text-amber-600" />
+          </div>
+        );
       default:
         return null;
     }
@@ -445,6 +455,27 @@ const Dashboard = () => {
         );
       case 'alumni':
         return null; // Alumni has their own custom layout
+      case 'staff':
+        return (
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+            <Card>
+              <CardHeader><CardTitle>Recent Announcements</CardTitle></CardHeader>
+              <CardContent>
+                <ul className="space-y-1">
+                  <li className="flex justify-between text-sm"><span>Staff Meeting</span><span className="text-muted-foreground">Today</span></li>
+                  <li className="flex justify-between text-sm"><span>Policy Update</span><span className="text-muted-foreground">2 days ago</span></li>
+                  <li className="flex justify-between text-sm"><span>Holiday Notice</span><span className="text-muted-foreground">Last week</span></li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader><CardTitle>Feedback</CardTitle></CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">You have 2 new feedback messages.</p>
+              </CardContent>
+            </Card>
+          </div>
+        );
       default:
         return null;
     }
@@ -861,6 +892,94 @@ const Dashboard = () => {
     );
   };
 
+  // Staff-specific content
+  const getStaffContent = () => {
+    return (
+      <div className="space-y-6">
+        {/* Greeting and staff info */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-bold">{currentGreeting}, {user?.name || 'Staff'}!</h2>
+            <p className="text-muted-foreground">
+              Department: {user?.department || 'Administration'}
+            </p>
+          </div>
+        </div>
+
+        {/* Stat Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <StatCard title="My Salary" value="₹45,000" description="Current Month" icon={CreditCard} trend={0.5} color="text-green-600" />
+          <StatCard title="Salary History" value="12 Payments" description="Last 12 months" icon={FileText} trend={0.2} color="text-blue-600" />
+          <StatCard title="Announcements" value="3" description="Unread" icon={Bell} trend={1.1} color="text-amber-600" />
+        </div>
+
+        {/* Quick Actions */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Activity className="h-5 w-5" />
+              Quick Actions
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Link to="/salary-management">
+                  <CreditCard className="h-6 w-6" />
+                  <span className="text-sm">View Salary</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Link to="/profile">
+                  <User className="h-6 w-6" />
+                  <span className="text-sm">Profile</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Link to="/announcements">
+                  <Bell className="h-6 w-6" />
+                  <span className="text-sm">Announcements</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Link to="/feedback">
+                  <MessageSquare className="h-6 w-6" />
+                  <span className="text-sm">Feedback</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+                <Link to="/settings">
+                  <Settings className="h-6 w-6" />
+                  <span className="text-sm">Settings</span>
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Analytics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader><CardTitle>Recent Announcements</CardTitle></CardHeader>
+            <CardContent>
+              <ul className="space-y-1">
+                <li className="flex justify-between text-sm"><span>Staff Meeting</span><span className="text-muted-foreground">Today</span></li>
+                <li className="flex justify-between text-sm"><span>Policy Update</span><span className="text-muted-foreground">2 days ago</span></li>
+                <li className="flex justify-between text-sm"><span>Holiday Notice</span><span className="text-muted-foreground">Last week</span></li>
+              </ul>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader><CardTitle>Feedback</CardTitle></CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">You have 2 new feedback messages.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  };
+
   if (user?.role === 'teacher') {
     return (
       <DashboardLayout>
@@ -881,6 +1000,14 @@ const Dashboard = () => {
     return (
       <DashboardLayout>
         {getAlumniContent()}
+      </DashboardLayout>
+    );
+  }
+
+  if (user?.role === 'staff') {
+    return (
+      <DashboardLayout>
+        {getStaffContent()}
       </DashboardLayout>
     );
   }

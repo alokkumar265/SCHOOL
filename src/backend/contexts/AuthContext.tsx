@@ -82,6 +82,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         };
         setUser(alumniUser);
         localStorage.setItem('schoolUser', JSON.stringify(alumniUser));
+      } else if (email === 'staff@school.edu' && password === 'staff') {
+        const staffUser: User = {
+          id: '5',
+          name: 'Staff User',
+          email: 'staff@school.edu',
+          role: 'staff',
+          active: true,
+          department: 'Administration',
+          phoneNumber: '+91 90000 00000',
+          address: 'Delhi, India',
+          joiningDate: '2020-01-10',
+        };
+        setUser(staffUser);
+        localStorage.setItem('schoolUser', JSON.stringify(staffUser));
       } else {
         throw new Error('Invalid credentials');
       }

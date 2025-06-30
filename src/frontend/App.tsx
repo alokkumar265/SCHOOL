@@ -286,7 +286,7 @@ const App = () => {
               <Route 
                 path="/profile" 
                 element={
-                  <ProtectedRoute allowedRoles={['student', 'teacher', 'admin', 'parent', 'alumni']}>
+                  <ProtectedRoute allowedRoles={["student", "teacher", "admin", "parent", "alumni", "staff"]}>
                     <ProfilePage />
                   </ProtectedRoute>
                 } 
@@ -302,7 +302,7 @@ const App = () => {
               <Route 
                 path="/notifications" 
                 element={
-                  <ProtectedRoute allowedRoles={['student', 'teacher', 'admin', 'parent', 'alumni']}>
+                  <ProtectedRoute allowedRoles={['student', 'teacher', 'admin', 'parent', 'alumni', 'staff']}>
                     <NotificationsPage />
                   </ProtectedRoute>
                 } 
@@ -310,7 +310,7 @@ const App = () => {
               <Route 
                 path="/settings" 
                 element={
-                  <ProtectedRoute allowedRoles={['student', 'teacher', 'admin', 'parent', 'alumni']}>
+                  <ProtectedRoute allowedRoles={["student", "teacher", "admin", "parent", "alumni", "staff"]}>
                     <SettingsPage />
                   </ProtectedRoute>
                 } 
@@ -370,7 +370,7 @@ const App = () => {
               <Route 
                 path="/my-salary" 
                 element={
-                  <ProtectedRoute allowedRoles={['teacher']}>
+                  <ProtectedRoute allowedRoles={['teacher', 'staff']}>
                     <MySalaryPage />
                   </ProtectedRoute>
                 } 
@@ -386,7 +386,7 @@ const App = () => {
               <Route 
                 path="/salary-history" 
                 element={
-                  <ProtectedRoute allowedRoles={['teacher']}>
+                  <ProtectedRoute allowedRoles={['teacher', 'staff']}>
                     <SalaryHistoryPage />
                   </ProtectedRoute>
                 } 
@@ -396,7 +396,7 @@ const App = () => {
               <Route 
                 path="/announcements" 
                 element={
-                  <ProtectedRoute allowedRoles={['student', 'teacher', 'admin', 'parent', 'alumni']}>
+                  <ProtectedRoute allowedRoles={['student', 'teacher', 'admin', 'parent', 'alumni', 'staff']}>
                     <AnnouncementsPage />
                   </ProtectedRoute>
                 } 
@@ -510,7 +510,7 @@ const App = () => {
               <Route 
                 path="/feedback" 
                 element={
-                  <ProtectedRoute allowedRoles={['student', 'teacher', 'admin', 'parent', 'alumni']}>
+                  <ProtectedRoute allowedRoles={['student', 'teacher', 'admin', 'parent', 'alumni', 'staff']}>
                     <FeedbackPage />
                   </ProtectedRoute>
                 } 
